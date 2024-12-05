@@ -45,7 +45,7 @@ void Cleanup(MainData* const, GameData* const);
 
 void OnKeyPressed(sfKeyEvent, sfRenderWindow* const, GameData* const);
 
-void OnMousePressed(sfMouseButtonEvent, GameData* const);
+void OnMousePressed(sfMouseButtonEvent, sfRenderWindow* const _render, GameData* const);
 
 void OnMouseMoved(sfMouseMoveEvent, GameData* const);
 
@@ -126,7 +126,7 @@ void PollEvent(sfRenderWindow* const _render, GameData* const _game)
 			OnKeyPressed(event.key, _render, _game);
 			break;
 		case sfEvtMouseButtonPressed:
-			OnMousePressed(event.mouseButton, _game);
+			OnMousePressed(event.mouseButton, _render ,_game);
 			break;
 		case sfEvtMouseMoved:
 			OnMouseMoved(event.mouseMove, _game);
@@ -202,7 +202,7 @@ void OnKeyPressed(sfKeyEvent _key, sfRenderWindow* const _render, GameData* cons
 	}
 }
 
-void OnMousePressed(sfMouseButtonEvent _mouse, GameData* const _game)
+void OnMousePressed(sfMouseButtonEvent _mouse, sfRenderWindow* const _render, GameData* const _game)
 {
 	enum GameState state = GetGameState();
 
@@ -211,7 +211,7 @@ void OnMousePressed(sfMouseButtonEvent _mouse, GameData* const _game)
 	case MENU:
 		break;
 	case GAME:
-		OnMousePressedGame(_mouse, NULL);
+		OnMousePressedGame(_mouse, _render);
 		break;
 	default:
 		break;

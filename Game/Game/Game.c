@@ -33,6 +33,7 @@ void OnKeyPressedGame(sfKeyEvent _key, sfRenderWindow* _render)
 
 void OnMousePressedGame(sfMouseButtonEvent _mouse, sfRenderWindow* _render)
 {
+	OnMousePressedEnnemy(_mouse, _render);
 }
 
 void DrawGame(sfRenderWindow* _render)

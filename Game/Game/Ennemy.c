@@ -10,7 +10,8 @@ void CollideMouseEnnemy(sfRenderWindow* _render);
 
 void LoadEnnemy(void)
 {
-	EnnemySetState(IDLE);
+	ennemy.collisionTexture = sfTexture_createFromFile("Assets/Sprites/WalkDamages.png",NULL);
+	EnnemySetState(WALK);
 	CreateAnimation(&ennemy.anim.idle, "Assets/Sprites/Idle.png", 1, 1, 1, sfTrue, (sfVector2f) { 0, 0 });
 	CreateAnimation(&ennemy.anim.walk, "Assets/Sprites/Walk.png", 1, 1, 1, sfTrue, (sfVector2f) { 0, 0 });
 	CreateAnimation(&ennemy.anim.hurt, "Assets/Sprites/Hurt.png", 1, 1, 1, sfTrue, (sfVector2f) { 0, 0 });
@@ -27,11 +28,23 @@ void LoadEnnemy(void)
 	ennemy.hurtedTime = HURTED_TIME;
 }
 
+void OnMousePressedEnnemy(sfMouseButtonEvent _mouse, sfRenderWindow* _render)
+{
+	switch (_mouse.button)
+	{
+	case sfMouseLeft:
+		CollideMouseEnnemy(_render);
+		break;
+	default:
+		break;
+	}
+}
+
 
 void UpdateEnnemy(float _dt, sfRenderWindow* _render)
 {
 	UpdateEnnemyAnimation();
-	CollideMouseEnnemy(_render);
+	sfSprite_setPosition(ennemy.anim.current->sprite, (sfVector2f) { SCREEN_W / 2, SCREEN_H / 2 });
 }
 
 void DrawEnnemy(sfRenderWindow* _render)
@@ -67,14 +80,24 @@ void UpdateEnnemyAnimation()
 
 void CollideMouseEnnemy(sfRenderWindow* _render)
 {
-	sfFloatRect rect = sfSprite_getGlobalBounds(ennemy.anim.current->sprite);
+	sfFloatRect enemyHitbox = sfSprite_getGlobalBounds(ennemy.anim.current->sprite);
 
 	sfVector2i mouse = sfMouse_getPositionRenderWindow(_render);
-	if (sfMouse_isButtonPressed(sfMouseLeft))
+
+	if (CollisionPointRect(enemyHitbox, mouse))
 	{
-		if (CollisionPointRect(rect, mouse))
+		sfTexture* enemyTexture = sfSprite_getTexture(ennemy.collisionTexture);
+		sfImage* enemyImage = sfTexture_copyToImage(ennemy.collisionTexture);
+		sfVector2u pixelPos = { mouse.x - enemyHitbox.left, mouse.y - enemyHitbox.top };
+		sfColor pixelColor = sfImage_getPixel(enemyImage, pixelPos.x, pixelPos.y);
+
+		// Click sur un pixel opaque
+		if (pixelColor.a == 255)
 		{
-			printf("collide\n");
+			printf("HIT\n");
 		}
+
+		sfImage_destroy(enemyImage);
+
 	}
 }

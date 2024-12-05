@@ -30,9 +30,11 @@ typedef struct Ennemy
 	EnnemyState state;
 	sfBool isHurted;
 	float hurtedTime;
+	sfSprite* collisionTexture;
 }Ennemy;
 
 void LoadEnnemy(void);
+void OnMousePressedEnnemy(sfMouseButtonEvent _mouse, sfRenderWindow* _render);
 void UpdateEnnemy(float _dt, sfRenderWindow* _render);
 void DrawEnnemy(sfRenderWindow* _render);
 #endif
