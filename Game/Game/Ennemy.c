@@ -29,6 +29,7 @@ void LoadEnnemy(void)
 	SetSpriteOrigine(&ennemy.anim.attack.sprite, (sfVector2f) { 2, 1 });
 
 	ennemy.isHurted = sfFalse;
+	ennemy.isFlipped = sfFalse;
 	ennemy.hurtedTime = HURTED_TIME;
 }
 
@@ -44,22 +45,20 @@ void OnMousePressedEnnemy(sfMouseButtonEvent _mouse, sfRenderWindow* _render)
 	}
 }
 
-
 void UpdateEnnemy(float _dt, sfRenderWindow* _render)
 {
-	// Mettre à jour la position
+	sfFloatRect enemyBox = sfSprite_getLocalBounds(ennemy.anim.current->sprite);
 	ennemy.position.x += ennemy.direction * ennemy.speed * _dt;
 
-	// Vérifier les limites de l'écran et changer de direction
-	if (ennemy.position.x < 0 || ennemy.position.x > SCREEN_W)
+	if (ennemy.position.x < 0 + enemyBox.width / 2 || ennemy.position.x > SCREEN_W - enemyBox.width / 2)
 	{
-		ennemy.direction *= -1; // Inverse la direction
+		ennemy.direction *= -1;
+		ennemy.isFlipped = (ennemy.direction < 0) ? sfTrue : sfFalse;
+
+		sfSprite_setScale(ennemy.anim.current->sprite,(sfVector2f) {ennemy.isFlipped ? -1 : 1, 1});
 	}
 
-	// Appliquer la position à l'animation actuelle
 	sfSprite_setPosition(ennemy.anim.current->sprite, ennemy.position);
-
-	// Mettre à jour l'animation en fonction de l'état
 	UpdateEnnemyAnimation();
 }
 
@@ -93,7 +92,17 @@ void UpdateEnnemyAnimation()
 	default:
 		break;
 	}
+
+	if (ennemy.isFlipped)
+	{
+		sfSprite_setScale(ennemy.anim.current->sprite, (sfVector2f) { ennemy.isFlipped ? -1 : 1, 1 });
+	}
+	else
+	{
+		sfSprite_setScale(ennemy.anim.current->sprite, (sfVector2f) { -1, 1 });
+	}
 }
+
 
 void CollideMouseEnnemy(sfRenderWindow* _render)
 {
@@ -117,7 +126,18 @@ void CollideMouseEnnemy(sfRenderWindow* _render)
 			break;
 		}
 
-		sfVector2u pixelPos = { mouse.x - enemyHitbox.left, mouse.y - enemyHitbox.top };
+		sfVector2u pixelPos;
+
+		if (ennemy.isFlipped)
+		{
+			pixelPos.x = enemyHitbox.width - (mouse.x - enemyHitbox.left);
+		}
+		else
+		{
+			pixelPos.x = mouse.x - enemyHitbox.left;
+		}
+
+		pixelPos.y = mouse.y - enemyHitbox.top;
 		sfColor pixelColor = sfImage_getPixel(enemyImage, pixelPos.x, pixelPos.y);
 
 		// Click sur un pixel opaque

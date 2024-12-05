@@ -6,7 +6,7 @@
 #include "../Libs/Collision.h"
 
 #define HURTED_TIME 0.5f
-#define SPEED 100.0f
+#define SPEED 200.0f
 typedef enum EnnemyState
 {
 	IDLE,
@@ -35,6 +35,7 @@ typedef struct Ennemy
 	EnnemyAnim anim;
 	EnnemyState state;
 	sfBool isHurted;
+	sfBool isFlipped;
 	float hurtedTime;
 	Collision collision;
 	sfVector2f position; 
