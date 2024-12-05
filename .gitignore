@@ -1,0 +1,99 @@
+# Prerequisites
+*.d
+
+# Object files
+*.o
+*.ko
+*.obj
+*.elf
+
+# Linker output
+*.ilk
+*.map
+*.exp
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Libraries
+*.a
+*.la
+*.lo
+
+# Shared objects (inc. Windows DLLs)
+*.so
+*.so.*
+*.dylib
+
+# Executables
+*.exe
+*.out
+*.app
+*.i*86
+*.x86_64
+*.hex
+
+# Debug files
+*.dSYM/
+*.su
+*.idb
+*.pdb
+
+# Kernel Module Compile Results
+*.mod*
+*.cmd
+.tmp_versions/
+modules.order
+Module.symvers
+Mkfile.old
+dkms.conf
+.vs/Game/v17/.suo
+.vs/Game/v17/Browse.VC.db
+.vs/Game/v17/DocumentLayout.json
+.vs/Game/v17/ipch/AutoPCH/2e0878e01718bf14/MAIN.ipch
+.vs/Game/v17/ipch/AutoPCH/81f69751102657fb/GAME.ipch
+.vs/Game/v17/ipch/AutoPCH/81f6905110264c16/GAME.ipch
+.vs/Game/v17/ipch/AutoPCH/2e0878e01718bf14/MAIN.ipch
+.vs/Game/v17/Browse.VC.opendb
+.vs/Game/v17/Browse.VC.db-wal
+.vs/Game/v17/Browse.VC.db-shm
+.vs/Game/v17/Browse.VC.db
+.vs/Game/v17/.suo
+.vs/Game/FileContentIndex/f8b8b423-c197-471d-bd69-961ffd833236.vsidx
+.vs/Game/FileContentIndex/c67d2028-2bc6-42ab-8b80-8043d1d1faae.vsidx
+.vs/Game/FileContentIndex/b8b761a7-fae6-46b7-8229-da205d23366d.vsidx
+.vs/Game/FileContentIndex/73458426-20c8-4f75-a2c0-e1e74e1bc47c.vsidx
+.vs/Game/FileContentIndex/6d36b699-71ab-4f05-af7a-6c1e36d1bd74.vsidx
+.vs/Game/FileContentIndex/304968a5-8e2c-4c05-88ab-50c49371caf4.vsidx
+.vs/Game/v17/ipch/AutoPCH/2e0878e01718bf14/MAIN.ipch
+.vs/Game/v17/Browse.VC.db
+.vs/Game/v17/.suo
+.vs/Game/FileContentIndex/f8b8b423-c197-471d-bd69-961ffd833236.vsidx
+.vs/Game/FileContentIndex/b8b761a7-fae6-46b7-8229-da205d23366d.vsidx
+.vs/Game/FileContentIndex/6d36b699-71ab-4f05-af7a-6c1e36d1bd74.vsidx
+.vs/Game/FileContentIndex/6d36b699-71ab-4f05-af7a-6c1e36d1bd74.vsidx
+.vs/Game/FileContentIndex/b8b761a7-fae6-46b7-8229-da205d23366d.vsidx
+.vs/Game/FileContentIndex/f8b8b423-c197-471d-bd69-961ffd833236.vsidx
+.vs/Game/v17/.suo
+.vs/Game/v17/Browse.VC.db
+.vs/Game/v17/ipch/AutoPCH/2e0878e01718bf14/MAIN.ipch
+Game/x64/Debug/Game.tlog/CL.command.1.tlog
+Game/x64/Debug/Game.tlog/Cl.items.tlog
+Game/x64/Debug/Game.tlog/CL.read.1.tlog
+Game/x64/Debug/Game.tlog/CL.write.1.tlog
+Game/x64/Debug/Game.tlog/link.command.1.tlog
+Game/x64/Debug/Game.tlog/link.read.1.tlog
+Game/x64/Debug/Game.tlog/link.secondary.1.tlog
+Game/x64/Debug/Game.tlog/link.write.1.tlog
+.vs/Game/v17/ipch/AutoPCH/b935733d776af4a4/PLAYER.ipch
+.vs/Game/v17/ipch/AutoPCH/b456a347abbd20a4/PLAYER.ipch
+.vs/Game/v17/ipch/AutoPCH/2e0878e01718bf14/MAIN.ipch
+.vs/Game/v17/.suo
+/.vs/Game/v17
+/.vs
+*.db
+/.vs
+.vs/Game/v17/.suo
+*.json
+/Game/x64
