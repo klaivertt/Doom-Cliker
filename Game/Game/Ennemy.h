@@ -6,7 +6,7 @@
 #include "../Libs/Collision.h"
 
 #define HURTED_TIME 0.5f
-
+#define SPEED 100.0f
 typedef enum EnnemyState
 {
 	IDLE,
@@ -24,14 +24,24 @@ typedef struct EnnemyAnim
 	Animation* current;
 }EnnemyAnim;
 
+typedef struct Collision
+{
+	sfSprite* idle;
+	sfSprite* walk;
+}Collision;
+
 typedef struct Ennemy
 {
 	EnnemyAnim anim;
 	EnnemyState state;
 	sfBool isHurted;
 	float hurtedTime;
-	sfSprite* collisionTexture;
-}Ennemy;
+	Collision collision;
+	sfVector2f position; 
+	float speed;        
+	int direction;    
+} Ennemy;
+
 
 void LoadEnnemy(void);
 void OnMousePressedEnnemy(sfMouseButtonEvent _mouse, sfRenderWindow* _render);

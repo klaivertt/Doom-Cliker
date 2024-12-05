@@ -10,14 +10,18 @@ void CollideMouseEnnemy(sfRenderWindow* _render);
 
 void LoadEnnemy(void)
 {
-	ennemy.collisionTexture = sfTexture_createFromFile("Assets/Sprites/WalkDamages.png",NULL);
+	ennemy.collision.idle = sfTexture_createFromFile("Assets/Sprites/IdleDamages.png", NULL);
+	ennemy.collision.walk = sfTexture_createFromFile("Assets/Sprites/WalkDamages.png", NULL);
+
 	EnnemySetState(WALK);
 	CreateAnimation(&ennemy.anim.idle, "Assets/Sprites/Idle.png", 1, 1, 1, sfTrue, (sfVector2f) { 0, 0 });
 	CreateAnimation(&ennemy.anim.walk, "Assets/Sprites/Walk.png", 1, 1, 1, sfTrue, (sfVector2f) { 0, 0 });
 	CreateAnimation(&ennemy.anim.hurt, "Assets/Sprites/Hurt.png", 1, 1, 1, sfTrue, (sfVector2f) { 0, 0 });
 	CreateAnimation(&ennemy.anim.attack, "Assets/Sprites/Attack.png", 1, 1, 1, sfTrue, (sfVector2f) { 0, 0 });
 	ennemy.anim.current = &ennemy.anim.idle;
-	sfSprite_setPosition(ennemy.anim.current->sprite, (sfVector2f) { SCREEN_W / 2, SCREEN_H / 2 });
+	ennemy.position = (sfVector2f){ SCREEN_W / 2, SCREEN_H / 1.5f };
+	ennemy.speed = SPEED;
+	ennemy.direction = -1;
 
 	SetSpriteOrigine(&ennemy.anim.idle.sprite, (sfVector2f) { 2, 1 });
 	SetSpriteOrigine(&ennemy.anim.walk.sprite, (sfVector2f) { 2, 1 });
@@ -43,9 +47,22 @@ void OnMousePressedEnnemy(sfMouseButtonEvent _mouse, sfRenderWindow* _render)
 
 void UpdateEnnemy(float _dt, sfRenderWindow* _render)
 {
+	// Mettre à jour la position
+	ennemy.position.x += ennemy.direction * ennemy.speed * _dt;
+
+	// Vérifier les limites de l'écran et changer de direction
+	if (ennemy.position.x < 0 || ennemy.position.x > SCREEN_W)
+	{
+		ennemy.direction *= -1; // Inverse la direction
+	}
+
+	// Appliquer la position à l'animation actuelle
+	sfSprite_setPosition(ennemy.anim.current->sprite, ennemy.position);
+
+	// Mettre à jour l'animation en fonction de l'état
 	UpdateEnnemyAnimation();
-	sfSprite_setPosition(ennemy.anim.current->sprite, (sfVector2f) { SCREEN_W / 2, SCREEN_H / 2 });
 }
+
 
 void DrawEnnemy(sfRenderWindow* _render)
 {
@@ -86,8 +103,20 @@ void CollideMouseEnnemy(sfRenderWindow* _render)
 
 	if (CollisionPointRect(enemyHitbox, mouse))
 	{
-		sfTexture* enemyTexture = sfSprite_getTexture(ennemy.collisionTexture);
-		sfImage* enemyImage = sfTexture_copyToImage(ennemy.collisionTexture);
+		sfImage* enemyImage = sfTexture_copyToImage(ennemy.collision.idle);
+
+		switch (ennemy.state)
+		{
+		case IDLE:
+			enemyImage = sfTexture_copyToImage(ennemy.collision.idle);
+			break;
+		case WALK:
+			enemyImage = sfTexture_copyToImage(ennemy.collision.walk);
+			break;
+		default:
+			break;
+		}
+
 		sfVector2u pixelPos = { mouse.x - enemyHitbox.left, mouse.y - enemyHitbox.top };
 		sfColor pixelColor = sfImage_getPixel(enemyImage, pixelPos.x, pixelPos.y);
 
