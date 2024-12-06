@@ -54,7 +54,7 @@
     <ClCompile Include="Game\Ennemy.c">
       <Filter>Fichiers sources\Game</Filter>
     </ClCompile>
-    <ClCompile Include="Libs\utilities.c">
+    <ClCompile Include="Libs\Utilities.c">
       <Filter>Fichiers sources\Libs</Filter>
     </ClCompile>
     <ClCompile Include="main.c">

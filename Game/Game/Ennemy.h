@@ -9,6 +9,7 @@
 #define SPEED 200.0f
 #define MIN_IDLE_TIME 1.0f
 #define ATTACK_TIME_LENGTH 1.0f
+#define ATTACK_ANIM_TIME 0.5f
 typedef enum EnnemyState
 {
 	IDLE,
@@ -47,6 +48,7 @@ typedef struct Ennemy
 	float moveTime;
 	float minIdleTime;
 	float attackTime;
+	float attackAnimTime;
 } Ennemy;
 
 

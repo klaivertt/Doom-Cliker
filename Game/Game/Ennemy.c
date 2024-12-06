@@ -35,6 +35,8 @@ void LoadEnnemy(void)
 
 	ennemy.moveTime = rand() % 5;
 	ennemy.minIdleTime = MIN_IDLE_TIME;
+	ennemy.attackTime = (rand() % 4) + 2;
+	ennemy.attackAnimTime = ATTACK_ANIM_TIME;
 }
 
 void OnMousePressedEnnemy(sfMouseButtonEvent _mouse, sfRenderWindow* _render)
@@ -53,12 +55,46 @@ void UpdateEnnemy(float _dt)
 {
 	sfFloatRect enemyBox = sfSprite_getLocalBounds(ennemy.anim.current->sprite);
 
-	ennemy.moveTime -= _dt;
+	ennemy.attackTime -= _dt;
+	if (ennemy.attackTime < 0)
+	{
+		EnnemySetState(ATTACK);
+	}
+	if (ennemy.state == WALK)
+	{
+		ennemy.moveTime -= _dt;
+		if (ennemy.moveTime < 0)
+		{			
+			EnnemySetState(IDLE);
+		}
+		else
+		{
+			ennemy.position.x += ennemy.direction * ennemy.speed * _dt;
+		}
 
-	if (ennemy.moveTime < 0)
+		if (ennemy.position.x < enemyBox.width / 2)
+		{
+			ennemy.position.x = enemyBox.width / 2;
+			ennemy.direction = 1;
+		}
+		else if (ennemy.position.x > SCREEN_W - enemyBox.width / 2)
+		{
+			ennemy.position.x = SCREEN_W - enemyBox.width / 2;
+			ennemy.direction = -1;
+		}
+
+		if (ennemy.direction == -1)
+		{
+			ennemy.isFlipped = sfFalse;
+		}
+		else
+		{
+			ennemy.isFlipped = sfTrue;
+		}
+	}
+	else if (ennemy.state == IDLE)
 	{
 		ennemy.minIdleTime -= _dt;
-		EnnemySetState(IDLE);
 		if (ennemy.minIdleTime < 0)
 		{
 			int random = rand() % 100;
@@ -69,32 +105,17 @@ void UpdateEnnemy(float _dt)
 				EnnemySetState(WALK);
 				ennemy.minIdleTime = MIN_IDLE_TIME;
 			}
-
 		}
 	}
-	else
+	else if (ennemy.state == ATTACK)
 	{
-		ennemy.position.x += ennemy.direction * ennemy.speed * _dt;
-	}
-
-	if (ennemy.position.x < enemyBox.width / 2)
-	{
-		ennemy.position.x = enemyBox.width / 2;
-		ennemy.direction = 1;
-	}
-	else if (ennemy.position.x > SCREEN_W - enemyBox.width / 2)
-	{
-		ennemy.position.x = SCREEN_W - enemyBox.width / 2;
-		ennemy.direction = -1;
-	}
-
-	if (ennemy.direction == -1)
-	{
-		ennemy.isFlipped = sfFalse;
-	}
-	else
-	{
-		ennemy.isFlipped = sfTrue;
+		ennemy.attackAnimTime -= _dt;
+		if (ennemy.attackAnimTime < 0)
+		{
+			ennemy.attackAnimTime = ATTACK_ANIM_TIME;
+			EnnemySetState(WALK);
+			ennemy.attackTime = (rand() % 6) + 2;
+		}
 	}
 
 	sfSprite_setPosition(ennemy.anim.current->sprite, ennemy.position);
@@ -125,9 +146,11 @@ void UpdateEnnemyAnimation()
 		ennemy.anim.current = &ennemy.anim.walk;
 		break;
 	case HURT:
+		sfSprite_setPosition(ennemy.anim.hurt.sprite, ennemy.position);
 		ennemy.anim.current = &ennemy.anim.hurt;
 		break;
 	case ATTACK:
+		sfSprite_setPosition(ennemy.anim.attack.sprite, ennemy.position);
 		ennemy.anim.current = &ennemy.anim.attack;
 		break;
 	default:
@@ -167,7 +190,7 @@ void CollideMouseEnnemy(sfRenderWindow* _render)
 			break;
 		}
 
-		sfVector2u pixelPos;
+		sfVector2u pixelPos = {0,0};
 
 		if (ennemy.isFlipped)
 		{
