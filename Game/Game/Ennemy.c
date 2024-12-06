@@ -59,12 +59,13 @@ void UpdateEnnemy(float _dt)
 	if (ennemy.attackTime < 0)
 	{
 		EnnemySetState(ATTACK);
+		ennemy.isHurted = sfFalse;
 	}
 	if (ennemy.state == WALK)
 	{
 		ennemy.moveTime -= _dt;
 		if (ennemy.moveTime < 0)
-		{			
+		{
 			EnnemySetState(IDLE);
 		}
 		else
@@ -117,6 +118,15 @@ void UpdateEnnemy(float _dt)
 			ennemy.attackTime = (rand() % 6) + 2;
 		}
 	}
+	else
+	{
+		ennemy.hurtedTime -= _dt;
+		if (ennemy.hurtedTime < 0)
+		{
+			EnnemySetState(IDLE);
+			ennemy.isHurted = sfFalse;
+		}
+	}
 
 	sfSprite_setPosition(ennemy.anim.current->sprite, ennemy.position);
 	UpdateEnnemyAnimation();
@@ -133,7 +143,7 @@ void EnnemySetState(EnnemyState const _state)
 {
 	ennemy.state = _state;
 }
-	
+
 void UpdateEnnemyAnimation()
 {
 	switch (ennemy.state)
@@ -171,7 +181,6 @@ void UpdateEnnemyAnimation()
 void CollideMouseEnnemy(sfRenderWindow* _render)
 {
 	sfFloatRect enemyHitbox = sfSprite_getGlobalBounds(ennemy.anim.current->sprite);
-
 	sfVector2i mouse = sfMouse_getPositionRenderWindow(_render);
 
 	if (CollisionPointRect(enemyHitbox, mouse))
@@ -186,11 +195,14 @@ void CollideMouseEnnemy(sfRenderWindow* _render)
 		case WALK:
 			enemyImage = sfTexture_copyToImage(ennemy.collision.walk);
 			break;
+		case ATTACK:
+			enemyImage = sfTexture_copyToImage(ennemy.collision.attack);
+			break;
 		default:
 			break;
 		}
 
-		sfVector2u pixelPos = {0,0};
+		sfVector2u pixelPos = { 0,0 };
 
 		if (ennemy.isFlipped)
 		{
@@ -205,12 +217,32 @@ void CollideMouseEnnemy(sfRenderWindow* _render)
 		sfColor pixelColor = sfImage_getPixel(enemyImage, pixelPos.x, pixelPos.y);
 
 		// Click sur un pixel opaque
-		if (pixelColor.a == 255)
+		if (!ennemy.isHurted)
 		{
-			printf("HIT\n");
+			if (pixelColor.a == 255)
+			{
+				if (pixelColor.r == 255 && pixelColor.g == 255)
+				{
+					printf("CHEST HIT\n");
+				}
+				else if (pixelColor.b == 255)
+				{
+					printf("ARMS HIT\n");
+				}
+				else if (pixelColor.g == 255)
+				{
+					printf("LEGS HIT\n");
+				}
+				else if (pixelColor.r == 255)
+				{
+					printf("HEAD SHOT\n");
+				}
+				EnnemySetState(HURT);
+				ennemy.isHurted = sfTrue;
+				ennemy.hurtedTime = HURTED_TIME;
+			}
 		}
 
 		sfImage_destroy(enemyImage);
-
 	}
 }
