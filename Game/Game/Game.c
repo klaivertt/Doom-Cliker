@@ -17,8 +17,8 @@ void LoadGame(void)
 
 void UpdateGame(float _dt, sfRenderWindow* _render)
 {
-	UpdatePlayer(_dt);
-	UpdateEnnemy(_dt, _render);
+	UpdatePlayer(_dt, _render);
+	UpdateEnnemy(_dt);
 }
 
 void OnKeyPressedGame(sfKeyEvent _key, sfRenderWindow* _render)

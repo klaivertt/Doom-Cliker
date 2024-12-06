@@ -28,7 +28,6 @@ typedef struct GameData
 #pragma endregion
 
 #pragma region Déclaration GameLoop
-
 void Load(MainData* const, GameData* const _data);
 void LoadScreen(MainData* const _data);
 void LoadClock(MainData* const _data);
@@ -48,7 +47,6 @@ void OnKeyPressed(sfKeyEvent, sfRenderWindow* const, GameData* const);
 void OnMousePressed(sfMouseButtonEvent, sfRenderWindow* const _render, GameData* const);
 
 void OnMouseMoved(sfMouseMoveEvent, GameData* const);
-
 #pragma endregion
 
 #pragma region GameLoop
@@ -104,6 +102,8 @@ void LoadScreen(MainData* const _data)
 	sfImage* image = sfImage_createFromFile("Assets/Icon.png");
 	sfVector2u size = sfImage_getSize(image);
 	sfRenderWindow_setIcon(_data->renderWindow, size.x, size.y, sfImage_getPixelsPtr(image));
+
+	sfRenderWindow_setMouseCursorVisible(_data->renderWindow, sfFalse);
 }
 
 // Fonction qui charge la clock pour le DeltaTime

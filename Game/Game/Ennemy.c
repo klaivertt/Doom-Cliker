@@ -12,6 +12,7 @@ void LoadEnnemy(void)
 {
 	ennemy.collision.idle = sfTexture_createFromFile("Assets/Sprites/IdleDamages.png", NULL);
 	ennemy.collision.walk = sfTexture_createFromFile("Assets/Sprites/WalkDamages.png", NULL);
+	ennemy.collision.attack = sfTexture_createFromFile("Assets/Sprites/AttackDamages.png", NULL);
 
 	EnnemySetState(WALK);
 	CreateAnimation(&ennemy.anim.idle, "Assets/Sprites/Idle.png", 1, 1, 1, sfTrue, (sfVector2f) { 0, 0 });
@@ -48,7 +49,7 @@ void OnMousePressedEnnemy(sfMouseButtonEvent _mouse, sfRenderWindow* _render)
 	}
 }
 
-void UpdateEnnemy(float _dt, sfRenderWindow* _render)
+void UpdateEnnemy(float _dt)
 {
 	sfFloatRect enemyBox = sfSprite_getLocalBounds(ennemy.anim.current->sprite);
 
@@ -61,7 +62,7 @@ void UpdateEnnemy(float _dt, sfRenderWindow* _render)
 		if (ennemy.minIdleTime < 0)
 		{
 			int random = rand() % 100;
-			if (random > 90)
+			if (random > 95)
 			{
 				ennemy.direction = rand() % 3 - 2;
 				ennemy.moveTime = rand() % 5;
@@ -110,7 +111,7 @@ void EnnemySetState(EnnemyState const _state)
 {
 	ennemy.state = _state;
 }
-
+	
 void UpdateEnnemyAnimation()
 {
 	switch (ennemy.state)

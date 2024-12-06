@@ -4,30 +4,21 @@
 #include "../Libs/Common.h"
 #include "../Libs/Animations.h"
 #include "../Libs/Collision.h"
+#include "../Libs/Utilities.h"
 
 typedef struct PlayerAnim
 {
-	Animation fall;
-	Animation land;
-	Animation idle;
 	Animation* current;
 }PlayerAnim;
 
 typedef struct Player
 {
-	PlayerAnim anim;
-	int index;
-	sfVector2f velocity;
-	float speed;
-	int targetX;
-	sfBool moving;
-	sfBool left;
+	sfSprite* mouse;
 }Player;
 
 void LoadPlayer(void);
-void UpdatePlayer(float);
+void UpdatePlayer(float _dt, sfRenderWindow* _render);
 void DrawPlayer(sfRenderWindow*);
 void OnKeyPressedPlayer(sfKeyEvent);
-
 #endif
 

@@ -8,6 +8,7 @@
 #define HURTED_TIME 0.5f
 #define SPEED 200.0f
 #define MIN_IDLE_TIME 1.0f
+#define ATTACK_TIME_LENGTH 1.0f
 typedef enum EnnemyState
 {
 	IDLE,
@@ -27,8 +28,9 @@ typedef struct EnnemyAnim
 
 typedef struct Collision
 {
-	sfSprite* idle;
-	sfSprite* walk;
+	sfTexture* idle;
+	sfTexture* walk;
+	sfTexture* attack;
 }Collision;
 
 typedef struct Ennemy
@@ -44,11 +46,12 @@ typedef struct Ennemy
 	int direction;   
 	float moveTime;
 	float minIdleTime;
+	float attackTime;
 } Ennemy;
 
 
 void LoadEnnemy(void);
 void OnMousePressedEnnemy(sfMouseButtonEvent _mouse, sfRenderWindow* _render);
-void UpdateEnnemy(float _dt, sfRenderWindow* _render);
+void UpdateEnnemy(float _dt);
 void DrawEnnemy(sfRenderWindow* _render);
 #endif
