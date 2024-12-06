@@ -60,6 +60,9 @@
     <ClCompile Include="main.c">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
+    <ClCompile Include="Libs\Text.c">
+      <Filter>Fichiers sources\Libs</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameState.h">
@@ -87,6 +90,9 @@
       <Filter>Fichiers d%27en-tête\Game</Filter>
     </ClInclude>
     <ClInclude Include="Libs\Utilities.h">
+      <Filter>Fichiers d%27en-tête\Libs</Filter>
+    </ClInclude>
+    <ClInclude Include="Libs\Text.h">
       <Filter>Fichiers d%27en-tête\Libs</Filter>
     </ClInclude>
   </ItemGroup>

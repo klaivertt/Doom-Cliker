@@ -144,6 +144,7 @@
     <ClCompile Include="Game\Player.c" />
     <ClCompile Include="Libs\Animation.c" />
     <ClCompile Include="Libs\Collision.c" />
+    <ClCompile Include="Libs\Text.c" />
     <ClCompile Include="Libs\Utilities.c" />
     <ClCompile Include="main.c" />
     <ClCompile Include="Menu\Menu.c" />
@@ -156,6 +157,7 @@
     <ClInclude Include="Libs\Animations.h" />
     <ClInclude Include="Libs\Collision.h" />
     <ClInclude Include="Libs\Common.h" />
+    <ClInclude Include="Libs\Text.h" />
     <ClInclude Include="Libs\Utilities.h" />
     <ClInclude Include="Menu\Menu.h" />
   </ItemGroup>

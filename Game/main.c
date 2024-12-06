@@ -4,6 +4,7 @@
 
 #include "../Game/Menu/Menu.h"
 #include "../Game/Game/Game.h"
+#include "../Game/Libs/Text.h"
 
 #pragma region Enumérations
 
@@ -87,6 +88,7 @@ void Load(MainData* const _data, GameData* const _game)
 
 	SetGameState(GAME);
 
+	LoadTextManager();
 	LoadGame();
 }
 

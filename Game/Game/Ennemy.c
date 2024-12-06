@@ -1,11 +1,13 @@
 #include "../Game/Ennemy.h"
 #include "../Libs/Utilities.h"
 #include "../Libs/Collision.h"
+#include "../Libs/Text.h"
 
 Ennemy ennemy = { 0 };
 
 void EnnemySetState(EnnemyState const _state);
 void UpdateEnnemyAnimation();
+void HeathUpdate();
 void CollideMouseEnnemy(sfRenderWindow* _render);
 
 void LoadEnnemy(void)
@@ -37,6 +39,11 @@ void LoadEnnemy(void)
 	ennemy.minIdleTime = MIN_IDLE_TIME;
 	ennemy.attackTime = (rand() % 4) + 2;
 	ennemy.attackAnimTime = ATTACK_ANIM_TIME;
+
+	ennemy.health = MAX_HEALTH;
+	ennemy.isAttacking = sfFalse;
+
+	InitText(&ennemy.heathText, "Health : %d", 25, (sfVector2f){0,0});
 }
 
 void OnMousePressedEnnemy(sfMouseButtonEvent _mouse, sfRenderWindow* _render)
@@ -60,6 +67,7 @@ void UpdateEnnemy(float _dt)
 	{
 		EnnemySetState(ATTACK);
 		ennemy.isHurted = sfFalse;
+		ennemy.isAttacking = sfTrue;
 	}
 	if (ennemy.state == WALK)
 	{
@@ -114,6 +122,7 @@ void UpdateEnnemy(float _dt)
 		if (ennemy.attackAnimTime < 0)
 		{
 			ennemy.attackAnimTime = ATTACK_ANIM_TIME;
+			ennemy.isAttacking = sfFalse;
 			EnnemySetState(WALK);
 			ennemy.attackTime = (rand() % 6) + 2;
 		}
@@ -177,6 +186,10 @@ void UpdateEnnemyAnimation()
 	}
 }
 
+void HeathUpdate()
+{
+}
+
 
 void CollideMouseEnnemy(sfRenderWindow* _render)
 {
@@ -217,25 +230,29 @@ void CollideMouseEnnemy(sfRenderWindow* _render)
 		sfColor pixelColor = sfImage_getPixel(enemyImage, pixelPos.x, pixelPos.y);
 
 		// Click sur un pixel opaque
-		if (!ennemy.isHurted)
+		if (!ennemy.isHurted && !ennemy.isAttacking)
 		{
 			if (pixelColor.a == 255)
 			{
 				if (pixelColor.r == 255 && pixelColor.g == 255)
 				{
 					printf("CHEST HIT\n");
+					ennemy.health -= 10;
 				}
 				else if (pixelColor.b == 255)
 				{
 					printf("ARMS HIT\n");
+					ennemy.health -= 7;
 				}
 				else if (pixelColor.g == 255)
 				{
 					printf("LEGS HIT\n");
+					ennemy.health -= 3;
 				}
 				else if (pixelColor.r == 255)
 				{
 					printf("HEAD SHOT\n");
+					ennemy.health -= 4;
 				}
 				EnnemySetState(HURT);
 				ennemy.isHurted = sfTrue;
