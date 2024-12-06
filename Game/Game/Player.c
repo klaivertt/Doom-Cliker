@@ -6,6 +6,8 @@ void LoadPlayer(void)
 {
 	CreateSprite(&player.mouse, (sfVector2f){0,0}, "Assets/Sprites/Cursor.png");
 	SetSpriteOrigine(&player.mouse, (sfVector2f) { 2, 2 });
+	CreateSprite(&player.gun, (sfVector2f){SCREEN_W/2, SCREEN_H}, "Assets/Sprites/Shotgun.png");
+	SetSpriteOrigine(&player.gun, (sfVector2f) { 2, 1 });
 }
 
 
@@ -19,6 +21,7 @@ void UpdatePlayer(float _dt, sfRenderWindow* _render)
 void DrawPlayer(sfRenderWindow* _render)
 {
 	sfRenderWindow_drawSprite(_render, player.mouse, NULL);
+	sfRenderWindow_drawSprite(_render, player.gun, NULL);
 }
 
 void OnKeyPressedPlayer(sfKeyEvent _key)

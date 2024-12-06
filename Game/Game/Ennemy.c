@@ -64,11 +64,12 @@ void UpdateEnnemy(float _dt)
 			int random = rand() % 100;
 			if (random > 95)
 			{
-				ennemy.direction = rand() % 3 - 2;
-				ennemy.moveTime = rand() % 5;
+				ennemy.direction = (rand() % 2) ? 1 : -1;
+				ennemy.moveTime = (rand() % 5) + 1;
 				EnnemySetState(WALK);
 				ennemy.minIdleTime = MIN_IDLE_TIME;
 			}
+
 		}
 	}
 	else
@@ -117,6 +118,7 @@ void UpdateEnnemyAnimation()
 	switch (ennemy.state)
 	{
 	case IDLE:
+		sfSprite_setPosition(ennemy.anim.idle.sprite, ennemy.position);
 		ennemy.anim.current = &ennemy.anim.idle;
 		break;
 	case WALK:
