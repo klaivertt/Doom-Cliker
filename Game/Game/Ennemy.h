@@ -7,6 +7,7 @@
 
 #define HURTED_TIME 0.5f
 #define SPEED 200.0f
+#define MIN_IDLE_TIME 1.0f
 typedef enum EnnemyState
 {
 	IDLE,
@@ -40,7 +41,9 @@ typedef struct Ennemy
 	Collision collision;
 	sfVector2f position; 
 	float speed;        
-	int direction;    
+	int direction;   
+	float moveTime;
+	float minIdleTime;
 } Ennemy;
 
 

@@ -31,6 +31,9 @@ void LoadEnnemy(void)
 	ennemy.isHurted = sfFalse;
 	ennemy.isFlipped = sfFalse;
 	ennemy.hurtedTime = HURTED_TIME;
+
+	ennemy.moveTime = rand() % 5;
+	ennemy.minIdleTime = MIN_IDLE_TIME;
 }
 
 void OnMousePressedEnnemy(sfMouseButtonEvent _mouse, sfRenderWindow* _render)
@@ -48,19 +51,54 @@ void OnMousePressedEnnemy(sfMouseButtonEvent _mouse, sfRenderWindow* _render)
 void UpdateEnnemy(float _dt, sfRenderWindow* _render)
 {
 	sfFloatRect enemyBox = sfSprite_getLocalBounds(ennemy.anim.current->sprite);
-	ennemy.position.x += ennemy.direction * ennemy.speed * _dt;
 
-	if (ennemy.position.x < 0 + enemyBox.width / 2 || ennemy.position.x > SCREEN_W - enemyBox.width / 2)
+	ennemy.moveTime -= _dt;
+
+	if (ennemy.moveTime < 0)
 	{
-		ennemy.direction *= -1;
-		ennemy.isFlipped = (ennemy.direction < 0) ? sfTrue : sfFalse;
+		ennemy.minIdleTime -= _dt;
+		EnnemySetState(IDLE);
+		if (ennemy.minIdleTime < 0)
+		{
+			int random = rand() % 100;
+			if (random > 90)
+			{
+				ennemy.direction = rand() % 3 - 2;
+				ennemy.moveTime = rand() % 5;
+				EnnemySetState(WALK);
+				ennemy.minIdleTime = MIN_IDLE_TIME;
+			}
+		}
+	}
+	else
+	{
+		ennemy.position.x += ennemy.direction * ennemy.speed * _dt;
+	}
 
-		sfSprite_setScale(ennemy.anim.current->sprite,(sfVector2f) {ennemy.isFlipped ? -1 : 1, 1});
+	if (ennemy.position.x < enemyBox.width / 2)
+	{
+		ennemy.position.x = enemyBox.width / 2;
+		ennemy.direction = 1;
+	}
+	else if (ennemy.position.x > SCREEN_W - enemyBox.width / 2)
+	{
+		ennemy.position.x = SCREEN_W - enemyBox.width / 2;
+		ennemy.direction = -1;
+	}
+
+	if (ennemy.direction == -1)
+	{
+		ennemy.isFlipped = sfFalse;
+	}
+	else
+	{
+		ennemy.isFlipped = sfTrue;
 	}
 
 	sfSprite_setPosition(ennemy.anim.current->sprite, ennemy.position);
 	UpdateEnnemyAnimation();
 }
+
 
 
 void DrawEnnemy(sfRenderWindow* _render)
@@ -95,11 +133,11 @@ void UpdateEnnemyAnimation()
 
 	if (ennemy.isFlipped)
 	{
-		sfSprite_setScale(ennemy.anim.current->sprite, (sfVector2f) { ennemy.isFlipped ? -1 : 1, 1 });
+		sfSprite_setScale(ennemy.anim.current->sprite, (sfVector2f) { -1, 1 });
 	}
 	else
 	{
-		sfSprite_setScale(ennemy.anim.current->sprite, (sfVector2f) { -1, 1 });
+		sfSprite_setScale(ennemy.anim.current->sprite, (sfVector2f) { 1, 1 });
 	}
 }
 
