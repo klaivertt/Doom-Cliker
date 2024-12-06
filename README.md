@@ -8,9 +8,7 @@ Ce projet vise à gérer un **ennemi interactif** doté de différents états et
 ## 🌟 Objectifs du Projet
 
 L'objectif principal était d'acquérir des compétences pratiques pour :  
-- 🎨 **Manipuler des sprites, textures et images** dans CSFML.  
 - 🎯 Implémenter une **détection précise des collisions** (rectangulaire et au pixel près).  
-- 🔄 Créer et gérer des **états dynamiques** : `idle`, `walk`, `hurt`, `attack`.  
 - 💥 Concevoir une **détection de dégâts localisés** sur les sprites.  
 - 🧩 Structurer et modulariser un projet de jeu vidéo.  
 
