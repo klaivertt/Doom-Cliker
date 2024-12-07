@@ -9,6 +9,7 @@ void EnnemySetState(EnnemyState const _state);
 void UpdateEnnemyAnimation();
 void HeathUpdate();
 void CollideMouseEnnemy(sfRenderWindow* _render);
+void RespawnEnnemy(void);
 
 void LoadEnnemy(void)
 {
@@ -42,7 +43,8 @@ void LoadEnnemy(void)
 
 	ennemy.health = MAX_HEALTH;
 	ennemy.isAttacking = sfFalse;
-
+	ennemy.isAlive = sfTrue;
+	ennemy.respawnTimer = 3.0f;
 	InitText(&ennemy.heathText, "Health", 25, (sfVector2f){0,0});
 }
 
@@ -127,6 +129,11 @@ void UpdateEnnemy(float _dt)
 			ennemy.attackTime = (rand() % 6) + 2;
 		}
 	}
+	if (ennemy.health <= 0)
+	{
+		ennemy.isAlive = sfFalse;
+		EnnemySetState(DEAD);
+	}
 	else
 	{
 		ennemy.hurtedTime -= _dt;
@@ -134,6 +141,17 @@ void UpdateEnnemy(float _dt)
 		{
 			EnnemySetState(IDLE);
 			ennemy.isHurted = sfFalse;
+		}
+	}
+
+	if (!ennemy.isAlive)
+	{
+		ennemy.respawnTimer -= _dt;
+
+		if (ennemy.respawnTimer <= 0)
+		{
+			RespawnEnnemy();
+			ennemy.respawnTimer = 3.0f;
 		}
 	}
 
@@ -267,4 +285,31 @@ void CollideMouseEnnemy(sfRenderWindow* _render)
 
 		sfImage_destroy(enemyImage);
 	}
+}
+
+void RespawnEnnemy(void)
+{
+	// Réinitialiser les attributs de l'ennemi
+	ennemy.position = (sfVector2f){ SCREEN_W / 2, SCREEN_H / 1.5f };
+	ennemy.speed = SPEED;
+	ennemy.direction = (rand() % 2 == 0) ? -1 : 1; 
+	ennemy.isHurted = sfFalse;
+	ennemy.isFlipped = sfFalse;
+	ennemy.hurtedTime = HURTED_TIME;
+
+	ennemy.moveTime = rand() % 5;
+	ennemy.minIdleTime = MIN_IDLE_TIME;
+	ennemy.attackTime = (rand() % 4) + 2;
+	ennemy.attackAnimTime = ATTACK_ANIM_TIME;
+
+	ennemy.health = MAX_HEALTH;
+	ennemy.isAttacking = sfFalse;
+	ennemy.state = IDLE;
+	ennemy.anim.current = &ennemy.anim.idle;
+
+	UpdateText(&ennemy.heathText, "Health : %d", ennemy.health);
+
+	ennemy.isAlive = sfTrue;
+
+	printf("Enemy respawned at position: (%f, %f)\n", ennemy.position.x, ennemy.position.y);
 }

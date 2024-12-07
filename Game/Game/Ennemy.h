@@ -15,8 +15,9 @@ typedef enum EnnemyState
 {
 	IDLE,
 	WALK,
+	ATTACK,
 	HURT,
-	ATTACK
+	DEAD
 }EnnemyState;
 
 typedef struct EnnemyAnim
@@ -53,6 +54,8 @@ typedef struct Ennemy
 	sfBool isAttacking;
 	int health;
 	sfText* heathText;
+	sfBool isAlive;
+	float respawnTimer;
 } Ennemy;
 
 
