@@ -10,7 +10,7 @@
 #define MIN_IDLE_TIME 1.0f
 #define ATTACK_TIME_LENGTH 1.0f
 #define ATTACK_ANIM_TIME 0.5f
-#define MAX_HEALTH 100.0f
+#define MAX_HEALTH 100
 typedef enum EnnemyState
 {
 	IDLE,
@@ -51,7 +51,7 @@ typedef struct Ennemy
 	float attackTime;
 	float attackAnimTime;
 	sfBool isAttacking;
-	float health;
+	int health;
 	sfText* heathText;
 } Ennemy;
 

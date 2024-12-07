@@ -19,9 +19,9 @@ void InitText(sfText** _text, const char* _string, unsigned int _fontSize, sfVec
 
 }
 
-void UpdateText(sfText* _text, const char* _string, int _value)
+void UpdateText(sfText** _text, const char* _string, int _value)
 {
-    char string[30];
-    sprintf_s(string, sizeof(string), _string , _value);
-    sfText_setString(_text, string);
+    char string[50];
+    sprintf_s(string, sizeof(string), _string, _value);
+    sfText_setString(*_text, string);
 }

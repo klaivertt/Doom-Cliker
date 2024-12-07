@@ -43,7 +43,7 @@ void LoadEnnemy(void)
 	ennemy.health = MAX_HEALTH;
 	ennemy.isAttacking = sfFalse;
 
-	InitText(&ennemy.heathText, "Health : %d", 25, (sfVector2f){0,0});
+	InitText(&ennemy.heathText, "Health", 25, (sfVector2f){0,0});
 }
 
 void OnMousePressedEnnemy(sfMouseButtonEvent _mouse, sfRenderWindow* _render)
@@ -140,7 +140,9 @@ void UpdateEnnemy(float _dt)
 	sfSprite_setPosition(ennemy.anim.current->sprite, ennemy.position);
 	UpdateEnnemyAnimation();
 	UpdateText(&ennemy.heathText, "Health : %d", ennemy.health);
-	sfText_setPosition(ennemy.heathText, (sfVector2f) { ennemy.position.x, ennemy.position.y - enemyBox.height});
+	sfFloatRect textBounds = sfText_getLocalBounds(ennemy.heathText);
+	sfText_setOrigin(ennemy.heathText, (sfVector2f) { textBounds.width / 2, textBounds.height });
+	sfText_setPosition(ennemy.heathText, (sfVector2f) { ennemy.position.x, ennemy.position.y - enemyBox.height - 25});
 }
 
 
