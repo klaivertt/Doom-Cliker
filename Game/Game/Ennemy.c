@@ -139,6 +139,8 @@ void UpdateEnnemy(float _dt)
 
 	sfSprite_setPosition(ennemy.anim.current->sprite, ennemy.position);
 	UpdateEnnemyAnimation();
+	UpdateText(&ennemy.heathText, "Health : %d", ennemy.health);
+	sfText_setPosition(ennemy.heathText, (sfVector2f) { ennemy.position.x, ennemy.position.y - enemyBox.height});
 }
 
 
@@ -146,6 +148,7 @@ void UpdateEnnemy(float _dt)
 void DrawEnnemy(sfRenderWindow* _render)
 {
 	sfRenderWindow_drawSprite(_render, ennemy.anim.current->sprite, NULL);
+	sfRenderWindow_drawText(_render, ennemy.heathText, NULL);
 }
 
 void EnnemySetState(EnnemyState const _state)

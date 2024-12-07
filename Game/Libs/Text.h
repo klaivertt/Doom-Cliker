@@ -10,7 +10,7 @@ typedef struct {
 
 void LoadTextManager(void);
 
-sfText* InitText(sfText* _text, const char* _string, unsigned int _fontSize, sfVector2f _position);
+void InitText(sfText** _text, const char* _string, unsigned int _fontSize, sfVector2f _position);
 
 void UpdateText(sfText* _text, const char* _string, int _value);
 #endif
