@@ -22,6 +22,7 @@ void LoadEnnemy(void)
 	CreateAnimation(&ennemy.anim.walk, "Assets/Sprites/Walk.png", 1, 1, 1, sfTrue, (sfVector2f) { 0, 0 });
 	CreateAnimation(&ennemy.anim.hurt, "Assets/Sprites/Hurt.png", 1, 1, 1, sfTrue, (sfVector2f) { 0, 0 });
 	CreateAnimation(&ennemy.anim.attack, "Assets/Sprites/Attack.png", 1, 1, 1, sfTrue, (sfVector2f) { 0, 0 });
+	CreateAnimation(&ennemy.anim.dead, "Assets/Sprites/Dead.png", 1, 1, 1, sfTrue, (sfVector2f) { 0, 0 });
 	ennemy.anim.current = &ennemy.anim.idle;
 	ennemy.position = (sfVector2f){ SCREEN_W / 2, SCREEN_H / 1.5f };
 	ennemy.speed = SPEED;
@@ -31,6 +32,7 @@ void LoadEnnemy(void)
 	SetSpriteOrigine(&ennemy.anim.walk.sprite, (sfVector2f) { 2, 1 });
 	SetSpriteOrigine(&ennemy.anim.hurt.sprite, (sfVector2f) { 2, 1 });
 	SetSpriteOrigine(&ennemy.anim.attack.sprite, (sfVector2f) { 2, 1 });
+	SetSpriteOrigine(&ennemy.anim.dead.sprite, (sfVector2f) { 2, 1 });
 
 	ennemy.isHurted = sfFalse;
 	ennemy.isFlipped = sfFalse;
@@ -45,7 +47,7 @@ void LoadEnnemy(void)
 	ennemy.isAttacking = sfFalse;
 	ennemy.isAlive = sfTrue;
 	ennemy.respawnTimer = 3.0f;
-	InitText(&ennemy.heathText, "Health", 25, (sfVector2f){0,0});
+	InitText(&ennemy.heathText, "Health", 25, (sfVector2f) { 0, 0 });
 }
 
 void OnMousePressedEnnemy(sfMouseButtonEvent _mouse, sfRenderWindow* _render)
@@ -160,7 +162,7 @@ void UpdateEnnemy(float _dt)
 	UpdateText(&ennemy.heathText, "Health : %d", ennemy.health);
 	sfFloatRect textBounds = sfText_getLocalBounds(ennemy.heathText);
 	sfText_setOrigin(ennemy.heathText, (sfVector2f) { textBounds.width / 2, textBounds.height });
-	sfText_setPosition(ennemy.heathText, (sfVector2f) { ennemy.position.x, ennemy.position.y - enemyBox.height - 25});
+	sfText_setPosition(ennemy.heathText, (sfVector2f) { ennemy.position.x, ennemy.position.y - enemyBox.height - 25 });
 }
 
 
@@ -194,6 +196,10 @@ void UpdateEnnemyAnimation()
 	case ATTACK:
 		sfSprite_setPosition(ennemy.anim.attack.sprite, ennemy.position);
 		ennemy.anim.current = &ennemy.anim.attack;
+		break;
+	case DEAD:
+		sfSprite_setPosition(ennemy.anim.dead.sprite, ennemy.position);
+		ennemy.anim.current = &ennemy.anim.dead;
 		break;
 	default:
 		break;
@@ -260,12 +266,12 @@ void CollideMouseEnnemy(sfRenderWindow* _render)
 				if (pixelColor.r == 255 && pixelColor.g == 255)
 				{
 					printf("CHEST HIT\n");
-					ennemy.health -= 10;
+					ennemy.health -= 7;
 				}
 				else if (pixelColor.b == 255)
 				{
 					printf("ARMS HIT\n");
-					ennemy.health -= 7;
+					ennemy.health -= 5;
 				}
 				else if (pixelColor.g == 255)
 				{
@@ -275,7 +281,7 @@ void CollideMouseEnnemy(sfRenderWindow* _render)
 				else if (pixelColor.r == 255)
 				{
 					printf("HEAD SHOT\n");
-					ennemy.health -= 4;
+					ennemy.health -= 10;
 				}
 				EnnemySetState(HURT);
 				ennemy.isHurted = sfTrue;
@@ -292,7 +298,7 @@ void RespawnEnnemy(void)
 	// Réinitialiser les attributs de l'ennemi
 	ennemy.position = (sfVector2f){ SCREEN_W / 2, SCREEN_H / 1.5f };
 	ennemy.speed = SPEED;
-	ennemy.direction = (rand() % 2 == 0) ? -1 : 1; 
+	ennemy.direction = (rand() % 2 == 0) ? -1 : 1;
 	ennemy.isHurted = sfFalse;
 	ennemy.isFlipped = sfFalse;
 	ennemy.hurtedTime = HURTED_TIME;

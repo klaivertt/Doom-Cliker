@@ -26,6 +26,7 @@ typedef struct EnnemyAnim
 	Animation walk;
 	Animation hurt;
 	Animation attack;
+	Animation dead;
 	Animation* current;
 }EnnemyAnim;
 
