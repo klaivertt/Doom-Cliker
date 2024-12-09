@@ -5,9 +5,9 @@ Player player = { 0 };
 void LoadPlayer(void)
 {
 	CreateSprite(&player.mouse, (sfVector2f){0,0}, "Assets/Sprites/Cursor.png");
-	SetSpriteOrigine(&player.mouse, (sfVector2f) { 2, 2 });
+	SetSpriteOrigin(&player.mouse, (sfVector2f) { 2, 2 });
 	CreateSprite(&player.gun, (sfVector2f){SCREEN_W/2, SCREEN_H}, "Assets/Sprites/Shotgun.png");
-	SetSpriteOrigine(&player.gun, (sfVector2f) { 2, 1 });
+	SetSpriteOrigin(&player.gun, (sfVector2f) { 2, 1 });
 }
 
 

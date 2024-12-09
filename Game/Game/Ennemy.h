@@ -32,9 +32,9 @@ typedef struct EnnemyAnim
 
 typedef struct Collision
 {
-	sfTexture* idle;
-	sfTexture* walk;
-	sfTexture* attack;
+	sfImage* idle;
+	sfImage* walk;
+	sfImage* attack;
 }Collision;
 
 typedef struct Ennemy

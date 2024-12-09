@@ -13,9 +13,9 @@ void RespawnEnnemy(void);
 
 void LoadEnnemy(void)
 {
-	ennemy.collision.idle = sfTexture_createFromFile("Assets/Sprites/IdleDamages.png", NULL);
-	ennemy.collision.walk = sfTexture_createFromFile("Assets/Sprites/WalkDamages.png", NULL);
-	ennemy.collision.attack = sfTexture_createFromFile("Assets/Sprites/AttackDamages.png", NULL);
+	ennemy.collision.idle = sfImage_createFromFile("Assets/Sprites/IdleDamages.png");
+	ennemy.collision.walk = sfImage_createFromFile("Assets/Sprites/WalkDamages.png");
+	ennemy.collision.attack = sfImage_createFromFile("Assets/Sprites/AttackDamages.png");
 
 	EnnemySetState(WALK);
 	CreateAnimation(&ennemy.anim.idle, "Assets/Sprites/Idle.png", 1, 1, 1, sfTrue, (sfVector2f) { 0, 0 });
@@ -28,11 +28,11 @@ void LoadEnnemy(void)
 	ennemy.speed = SPEED;
 	ennemy.direction = -1;
 
-	SetSpriteOrigine(&ennemy.anim.idle.sprite, (sfVector2f) { 2, 1 });
-	SetSpriteOrigine(&ennemy.anim.walk.sprite, (sfVector2f) { 2, 1 });
-	SetSpriteOrigine(&ennemy.anim.hurt.sprite, (sfVector2f) { 2, 1 });
-	SetSpriteOrigine(&ennemy.anim.attack.sprite, (sfVector2f) { 2, 1 });
-	SetSpriteOrigine(&ennemy.anim.dead.sprite, (sfVector2f) { 2, 1 });
+	SetSpriteOrigin(&ennemy.anim.idle.sprite, (sfVector2f) { 2, 1 });
+	SetSpriteOrigin(&ennemy.anim.walk.sprite, (sfVector2f) { 2, 1 });
+	SetSpriteOrigin(&ennemy.anim.hurt.sprite, (sfVector2f) { 2, 1 });
+	SetSpriteOrigin(&ennemy.anim.attack.sprite, (sfVector2f) { 2, 1 });
+	SetSpriteOrigin(&ennemy.anim.dead.sprite, (sfVector2f) { 2, 1 });
 
 	ennemy.isHurted = sfFalse;
 	ennemy.isFlipped = sfFalse;
@@ -227,71 +227,79 @@ void CollideMouseEnnemy(sfRenderWindow* _render)
 
 	if (CollisionPointRect(enemyHitbox, mouse))
 	{
-		sfImage* enemyImage = sfTexture_copyToImage(ennemy.collision.idle);
+		sfImage* enemyImage = NULL;
 
 		switch (ennemy.state)
 		{
 		case IDLE:
-			enemyImage = sfTexture_copyToImage(ennemy.collision.idle);
+			enemyImage = ennemy.collision.idle;
 			break;
 		case WALK:
-			enemyImage = sfTexture_copyToImage(ennemy.collision.walk);
+			enemyImage = ennemy.collision.walk;
 			break;
 		case ATTACK:
-			enemyImage = sfTexture_copyToImage(ennemy.collision.attack);
+			enemyImage = ennemy.collision.attack;
 			break;
 		default:
-			break;
+			return;
 		}
 
-		sfVector2u pixelPos = { 0,0 };
+		if (!enemyImage) 
+		{
+			return;
+		}
+
+		sfVector2u pixelPos = { 0, 0 };
 
 		if (ennemy.isFlipped)
 		{
-			pixelPos.x = enemyHitbox.width - (mouse.x - enemyHitbox.left);
+			pixelPos.x = (unsigned int)(enemyHitbox.width - (mouse.x - enemyHitbox.left));
 		}
 		else
 		{
-			pixelPos.x = mouse.x - enemyHitbox.left;
+			pixelPos.x = (unsigned int)(mouse.x - enemyHitbox.left);
 		}
 
-		pixelPos.y = mouse.y - enemyHitbox.top;
+		pixelPos.y = (unsigned int)(mouse.y - enemyHitbox.top);
+
+		sfVector2u imageSize = sfImage_getSize(enemyImage);
+		if (pixelPos.x >= imageSize.x || pixelPos.y >= imageSize.y)
+		{
+			return;
+		}
+
 		sfColor pixelColor = sfImage_getPixel(enemyImage, pixelPos.x, pixelPos.y);
 
-		// Click sur un pixel opaque
-		if (!ennemy.isHurted && !ennemy.isAttacking)
+		if (!ennemy.isHurted && !ennemy.isAttacking && pixelColor.a == 255)
 		{
-			if (pixelColor.a == 255)
+			if (pixelColor.r == 255 && pixelColor.g == 255)
 			{
-				if (pixelColor.r == 255 && pixelColor.g == 255)
-				{
-					printf("CHEST HIT\n");
-					ennemy.health -= 7;
-				}
-				else if (pixelColor.b == 255)
-				{
-					printf("ARMS HIT\n");
-					ennemy.health -= 5;
-				}
-				else if (pixelColor.g == 255)
-				{
-					printf("LEGS HIT\n");
-					ennemy.health -= 3;
-				}
-				else if (pixelColor.r == 255)
-				{
-					printf("HEAD SHOT\n");
-					ennemy.health -= 10;
-				}
-				EnnemySetState(HURT);
-				ennemy.isHurted = sfTrue;
-				ennemy.hurtedTime = HURTED_TIME;
+				printf("CHEST HIT\n");
+				ennemy.health -= 7;
 			}
-		}
+			if (pixelColor.g == 255)
+			{
+				printf("ARMS HIT\n");
+				ennemy.health -= 5;
+			}
+			if (pixelColor.b == 255)
+			{
+				printf("LEGS HIT\n");
+				ennemy.health -= 3;
+			}
+			if (pixelColor.r == 255)
+			{
+				printf("HEAD SHOT\n");
+				ennemy.health -= 10;
+			}
 
-		sfImage_destroy(enemyImage);
+			EnnemySetState(HURT);
+			ennemy.isHurted = sfTrue;
+			ennemy.hurtedTime = HURTED_TIME;
+		}
 	}
 }
+
 
 void RespawnEnnemy(void)
 {
